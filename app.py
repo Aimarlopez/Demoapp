@@ -73,9 +73,9 @@ def add_Item():
 
         return redirect(url_for('details', id=Item.id))
 
-@app.route('/review/<int:id>', methods=['POST'])
+@app.route('/amount/<int:id>', methods=['POST'])
 @csrf.exempt
-def add_review(id):
+def add_amount(id):
     try:
         user_name = request.values.get('user_name')
         rating = request.values.get('rating')
