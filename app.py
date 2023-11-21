@@ -61,7 +61,7 @@ def add_restaurant():
     except (KeyError):
         # Redisplay the question voting form.
         return render_template('add_restaurant.html', {
-            'error_message': "You must include a item name, address, and description",
+            'error_message': "You must include a item name, type, and description",
         })
     else:
         restaurant = Restaurant()
