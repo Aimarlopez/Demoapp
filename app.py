@@ -32,46 +32,46 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 # The import must be done after db initialization due to circular import issue
-from models import Restaurant, Review
+from models import Item, amount
 
 @app.route('/', methods=['GET'])
 def index():
     print('Request for index page received')
-    restaurants = Restaurant.query.all()
-    return render_template('index.html', restaurants=restaurants)
+    Items = Item.query.all()
+    return render_template('index.html', Items=Items)
 
 @app.route('/<int:id>', methods=['GET'])
 def details(id):
-    restaurant = Restaurant.query.where(Restaurant.id == id).first()
-    reviews = Review.query.where(Review.restaurant == id)
-    return render_template('details.html', restaurant=restaurant, reviews=reviews)
+    Item = Item.query.where(Item.id == id).first()
+    amounts = amount.query.where(amount.Item == id)
+    return render_template('details.html', Item=Item, amounts=amounts)
 
 @app.route('/create', methods=['GET'])
-def create_restaurant():
-    print('Request for add restaurant page received')
-    return render_template('create_restaurant.html')
+def create_Item():
+    print('Request for add item page received')
+    return render_template('create_Item.html')
 
 @app.route('/add', methods=['POST'])
 @csrf.exempt
-def add_restaurant():
+def add_Item():
     try:
-        name = request.values.get('restaurant_name')
-        street_address = request.values.get('street_address')
+        name = request.values.get('Item_name')
+        street_address = request.values.get('item_type')
         description = request.values.get('description')
     except (KeyError):
         # Redisplay the question voting form.
-        return render_template('add_restaurant.html', {
-            'error_message': "You must include a restaurant name, address, and description",
+        return render_template('add_item.html', {
+            'error_message': "You must include a item name, type, and description",
         })
     else:
-        restaurant = Restaurant()
-        restaurant.name = name
-        restaurant.street_address = street_address
-        restaurant.description = description
-        db.session.add(restaurant)
+        Item = Item()
+        Item.name = name
+        Item.street_address = street_address
+        Item.description = description
+        db.session.add(Item)
         db.session.commit()
 
-        return redirect(url_for('details', id=restaurant.id))
+        return redirect(url_for('details', id=Item.id))
 
 @app.route('/review/<int:id>', methods=['POST'])
 @csrf.exempt
@@ -79,20 +79,20 @@ def add_review(id):
     try:
         user_name = request.values.get('user_name')
         rating = request.values.get('rating')
-        review_text = request.values.get('review_text')
+        amount_text = request.values.get('amount_text')
     except (KeyError):
         #Redisplay the question voting form.
-        return render_template('add_review.html', {
-            'error_message': "Error adding review",
+        return render_template('add_amount.html', {
+            'error_message': "Error adding amount",
         })
     else:
-        review = Review()
-        review.restaurant = id
-        review.review_date = datetime.now()
-        review.user_name = user_name
-        review.rating = int(rating)
-        review.review_text = review_text
-        db.session.add(review)
+        amount = amount()
+        amount.Item = id
+        amount.amount_date = datetime.now()
+        amount.user_name = user_name
+        amount.rating = int(rating)
+        amount.amount_text = amount_text
+        db.session.add(amount)
         db.session.commit()
 
     return redirect(url_for('details', id=id))
@@ -100,17 +100,17 @@ def add_review(id):
 @app.context_processor
 def utility_processor():
     def star_rating(id):
-        reviews = Review.query.where(Review.restaurant == id)
+        amounts = amount.query.where(amount.Item == id)
 
         ratings = []
-        review_count = 0
-        for review in reviews:
-            ratings += [review.rating]
-            review_count += 1
+        amount_count = 0
+        for amount in amounts:
+            ratings += [amount.rating]
+            amount_count += 1
 
         avg_rating = sum(ratings) / len(ratings) if ratings else 0
-        stars_percent = round((avg_rating / 5.0) * 100) if review_count > 0 else 0
-        return {'avg_rating': avg_rating, 'review_count': review_count, 'stars_percent': stars_percent}
+        stars_percent = round((avg_rating / 5.0) * 100) if amount_count > 0 else 0
+        return {'avg_rating': avg_rating, 'amount_count': amount_count, 'stars_percent': stars_percent}
 
     return dict(star_rating=star_rating)
 
