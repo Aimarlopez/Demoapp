@@ -4,8 +4,8 @@ from sqlalchemy.orm import validates
 from app import db
 
 
-class Restaurant(db.Model):
-    __tablename__ = 'restaurant'
+class Item(db.Model):
+    __tablename__ = 'Item'
     id = Column(Integer, primary_key=True)
     name = Column(String(50))
     street_address = Column(String(50))
@@ -14,10 +14,10 @@ class Restaurant(db.Model):
     def __str__(self):
         return self.name
 
-class Review(db.Model):
-    __tablename__ = 'review'
+class amount(db.Model):
+    __tablename__ = 'amount'
     id = Column(Integer, primary_key=True)
-    restaurant = Column(Integer, ForeignKey('restaurant.id', ondelete="CASCADE"))
+    restaurant = Column(Integer, ForeignKey('Item.id', ondelete="CASCADE"))
     user_name = Column(String(30))
     rating = Column(Integer)
     review_text = Column(String(500))
