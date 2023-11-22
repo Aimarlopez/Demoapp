@@ -5,7 +5,7 @@ from app import db
 
 
 class Restaurant(db.Model):
-    __tablename__ = 'Item'
+    __tablename__ = 'restaurant'
     id = Column(Integer, primary_key=True)
     name = Column(String(50))
     street_address = Column(String(50))
@@ -15,7 +15,7 @@ class Restaurant(db.Model):
         return self.name
 
 class Review(db.Model):
-    __tablename__ = 'Amount'
+    __tablename__ = 'review'
     id = Column(Integer, primary_key=True)
     restaurant = Column(Integer, ForeignKey('restaurant.id', ondelete="CASCADE"))
     user_name = Column(String(30))
