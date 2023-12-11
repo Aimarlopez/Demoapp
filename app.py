@@ -48,7 +48,7 @@ def details(id):
 
 @app.route('/create', methods=['GET'])
 def create_restaurant():
-    print('Request for add restaurant page received')
+    print('Request for add player page received')
     return render_template('create_restaurant.html')
 
 @app.route('/add', methods=['POST'])
@@ -61,7 +61,7 @@ def add_restaurant():
     except (KeyError):
         # Redisplay the question voting form.
         return render_template('add_restaurant.html', {
-            'error_message': "You must include a restaurant name, address, and description",
+            'error_message': "You must include a player name, position, and description",
         })
     else:
         restaurant = Restaurant()
@@ -83,7 +83,7 @@ def add_review(id):
     except (KeyError):
         #Redisplay the question voting form.
         return render_template('add_review.html', {
-            'error_message': "Error adding review",
+            'error_message': "Error adding skills",
         })
     else:
         review = Review()
